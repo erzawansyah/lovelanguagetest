@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { UserSession } from './types/api/createSessionsRequest';
+import { UserInitialData, UserSession, WpCreateSessionRequestBody } from './types/api/createSessionsRequest';
+import { WpSessionPostTypeResponse } from './types/wpSessionsPostTypeResponse';
 
 
 export async function middleware(request: NextRequest) {
@@ -23,19 +24,14 @@ export async function middleware(request: NextRequest) {
         // if there is query params, create session
         if (hasQueryParams) {
             const response = NextResponse.next();
-            const session: UserSession = await fetch(`${origin}/api/sessions/start`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    user_name: queryParams.get('name') || '',
-                    user_email: queryParams.get('email') || '',
-                    quiz_id: Number(queryParams.get('quiz_id') || '0'),
-                    uuid: uuidv4(),
-                    start_date: Date.now().toString(),
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(res => res.json())
+            const session: UserSession = await createSession({
+                user_name: queryParams.get('name') || '',
+                user_email: queryParams.get('email') || '',
+                quiz_id: Number(queryParams.get('quiz_id') || '0'),
+                uuid: uuidv4(),
+                start_date: Date.now().toString(),
+            })
+            
             response.cookies.set('session', JSON.stringify(session), {
                 path: '/',
                 httpOnly: true,
@@ -71,3 +67,42 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
 }
 
+const createSession = async (data: UserInitialData) => {
+    const username: string = process.env.WP_USERNAME || "";
+    const token: string = process.env.WP_TOKEN || "";
+
+    const preparedBody: WpCreateSessionRequestBody = {
+        title: data.uuid,
+        status: 'publish',
+        acf: {
+            user_name: data.user_name,
+            user_email: data.user_email,
+            quiz_id: data.quiz_id,
+            start_date: data.start_date,
+        }
+    }
+
+    // create session
+    const wpRequest: Response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quiz_sessions`, {
+        method: 'POST',
+        body: JSON.stringify(preparedBody),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + Buffer.from(`${username}:${token}`).toString('base64')
+        }
+    })
+    const result: WpSessionPostTypeResponse = await wpRequest.json()
+
+    // prepare session data
+    const session: UserSession = {
+        session_id: result.id,
+        session_uuid: result.slug,
+        quiz_id: result.acf.quiz_id,
+        start_date: result.acf.start_date,
+        user: {
+            user_name: result.acf.user_name,
+            user_email: result.acf.user_email,
+        }
+    }
+    return session
+}
