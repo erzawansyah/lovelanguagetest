@@ -70,6 +70,8 @@ export async function middleware(request: NextRequest) {
 const createSession = async (data: UserInitialData) => {
     const username: string = process.env.WP_USERNAME || "";
     const token: string = process.env.WP_TOKEN || "";
+    console.log("username: ", username)
+    console.log("token: ", token)
 
     const preparedBody: WpCreateSessionRequestBody = {
         title: data.uuid,
@@ -83,7 +85,7 @@ const createSession = async (data: UserInitialData) => {
     }
 
     // create session
-    const wpRequest: Response = await fetch(`https://lovelanguagequiz.co/wp-json/wp/v2/quiz_sessions`, {
+    const wpRequest: Response = await fetch(`https://lovelanguagetest.co/wp-json/wp/v2/quiz_sessions`, {
         method: 'POST',
         body: JSON.stringify(preparedBody),
         headers: {
