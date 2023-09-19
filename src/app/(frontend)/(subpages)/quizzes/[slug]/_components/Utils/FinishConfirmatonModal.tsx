@@ -1,6 +1,7 @@
 import Modal from "@/app/(frontend)/_components/Modal"
 import { QuizStateInterface } from "../../_definition";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface FinishConfirmatonModalProps {
   isOpen: boolean;
@@ -28,8 +29,17 @@ const FinishConfirmatonModal = (props: FinishConfirmatonModalProps) => {
             <h1 className='text-2xl text-center'>Are you sure you want to finish the quiz?</h1>
             <p className='text-center'>You can not go back once you finish the quiz</p>
             <div className='flex gap-4 justify-center'>
-              <button onClick={handleFinishQuiz} className='btn-primary' disabled={status === 'loading' ? true : false}>Yes</button>
-              <button onClick={handleCloseModal} className='btn-primary'>No</button>
+              <button
+                onClick={handleFinishQuiz}
+                className='btn-primary w-full relative flex items-center justify-center gap-2' disabled={status === 'loading' ? true : false}>
+                {status === 'loading' ?
+                  <Image
+                    className="absolute animate-spin"
+                    alt='' src='/loading-icon.svg' width={20} height={20} />
+                  : " Yes"
+                }
+              </button>
+              <button onClick={handleCloseModal} className='btn-primary w-full'>No</button>
             </div>
           </>}
       </div>

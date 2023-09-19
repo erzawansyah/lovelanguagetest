@@ -70,8 +70,6 @@ export async function middleware(request: NextRequest) {
 const createSession = async (data: UserInitialData) => {
     const username: string = process.env.WP_USERNAME || "";
     const token: string = process.env.WP_TOKEN || "";
-    console.log("username: ", username)
-    console.log("token: ", token)
 
     const preparedBody: WpCreateSessionRequestBody = {
         title: data.uuid,

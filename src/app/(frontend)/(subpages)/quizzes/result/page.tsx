@@ -55,7 +55,7 @@ const ResultPage = () => {
         }
     }, [data, settings])
 
-    return (result && (
+    return (result ? (
         <div className="quiz-container mx-auto p-4 flex justify-center items-start">
             <section className="w-full lg:w-3/5 p-0 lg:p-6 rounded-lg grid grid-cols-2 gap-8 lg:gap-16">
                 <div className="mt-4 lg:hidden w-full col-span-2">
@@ -119,6 +119,14 @@ const ResultPage = () => {
                 </div>
             </section>
 
+        </div>
+    ) : (
+        <div className='p-8 flex flex-col gap-4'>
+            <Image
+                className="m-auto animate-spin"
+                alt='' src='/loading-icon.svg' width={48} height={48}
+            />
+            <p className="text-xs text-center">Calculate the results</p>
         </div>
     ))
 }

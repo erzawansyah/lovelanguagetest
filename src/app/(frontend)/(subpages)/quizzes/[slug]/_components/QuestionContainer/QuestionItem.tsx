@@ -2,62 +2,69 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useQuizContext } from '../QuizContainer/QuizProvider'
 import { ChoicesInterface, QuestionItemInterface, UserAnswerInterface } from '../../_definition'
+import Image from 'next/image';
 
 // QuestionItem component
-const QuestionItem = ({ data }: { data: QuestionItemInterface }) => {
+const QuestionItem = ({ data }: { data: QuestionItemInterface | undefined }) => {
     const [answer, setAnswer] = useState<UserAnswerInterface>()
     const { state, dispatch } = useQuizContext()
 
     // Effect to set the answer when userAnswers change
     useEffect(() => {
-        const userAnswer: UserAnswerInterface | undefined = state.userAnswers.find((answer) => answer.question_number === data.question_number)
+        const userAnswer: UserAnswerInterface | undefined = state.userAnswers.find((answer) => answer.question_number === data?.question_number)
         if (userAnswer) setAnswer(userAnswer)
         return () => {
             setAnswer(undefined)
         }
-    }, [state.userAnswers, data.question_number])
+    }, [state.userAnswers, data?.question_number])
 
     // Function to handle user answers
     const handleAnswer = useCallback((value: number | string) => {
-        if (!data.question_id) return
+        if (!data?.question_id) return
         const userAnswer: UserAnswerInterface = {
-            question_id: data.question_id,
-            question_number: data.question_number,
+            question_id: data?.question_id,
+            question_number: data?.question_number,
             answer: value,
-            answer_label: data.content?.choices.find((choice) => choice.value === value)?.statement || 'No Label'
+            answer_label: data?.content?.choices.find((choice) => choice.value === value)?.statement || 'No Label'
         }
         if (answer) {
             dispatch({ type: 'UPDATE_USER_ANSWER', payload: userAnswer })
-            if(state.status === 'finished') {
+            if (state.status === 'finished') {
                 dispatch({ type: 'SET_STATUS', payload: 'updated' })
             }
-            
+
             if (answer.answer !== userAnswer.answer) {
-                setTimeout(() => dispatch({ type: 'NEXT_QUESTION' }), 500)
+                setTimeout(() => dispatch({ type: 'NEXT_QUESTION' }), 100)
             }
         } else {
             dispatch({ type: 'SET_USER_ANSWER', payload: userAnswer })
             dispatch({ type: 'UPDATE_PROGRESS' })
-            setTimeout(() => dispatch({ type: 'NEXT_QUESTION' }), 500)
+            setTimeout(() => dispatch({ type: 'NEXT_QUESTION' }), 100)
         }
-    }, [answer, data.question_id, data.question_number, data.content?.choices ,dispatch, state.status])
+    }, [answer, data?.question_id, data?.question_number, data?.content?.choices, dispatch, state.status])
 
     return (
         <div className='mt-6'>
             <div className='text-center mb-6'>
-                <h5 className='text-xl font-semibold'>{`${data.content?.statement}`}</h5>
+                <h5 className='text-xl font-semibold'>{`${data?.content?.statement || "Waiting"}`}</h5>
             </div>
-            <div className='flex flex-col gap-4'>
-                {data.content?.choices.map((choice, index) => (
-                    <ChoiceButton
+            {
+                data ? <div className='flex flex-col gap-4'>
+                    {data?.content?.choices.map((choice, index) => <ChoiceButton
                         key={index}
                         answer={answer}
                         isAnswer={answer?.answer === choice.value}
                         content={choice}
                         handleAnswer={handleAnswer}
+                    />)}
+                </div> : <div className='p-8 flex flex-col gap-4'>
+                    <Image
+                        className="m-auto animate-spin"
+                        alt='' src='/loading-icon.svg' width={48} height={48}
                     />
-                ))}
-            </div>
+                    <p className="text-xs text-center">Fetching questions</p>
+                </div>
+            }
         </div>
     )
 }

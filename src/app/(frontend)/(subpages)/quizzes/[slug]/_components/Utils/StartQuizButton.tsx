@@ -25,7 +25,7 @@ export const StartQuizButton = () => {
             <button onClick={handleOpenModal} className='btn-primary'>Start Quiz</button>
             <Modal isOpen={modal}>
                 <div className='flex flex-col gap-4'>
-                    <h1 className='text-2xl'>Are you sure you want to start the quiz?</h1>
+                    <h1 className='text-lg lg:text-xl text-center'>Are you sure you want to start the quiz?</h1>
                     <div className='flex gap-4 justify-center'>
                         <button onClick={handleStartQuiz} className='btn-primary'>Yes</button>
                         <button onClick={() => setModal(false)} className='btn-primary'>No</button>
