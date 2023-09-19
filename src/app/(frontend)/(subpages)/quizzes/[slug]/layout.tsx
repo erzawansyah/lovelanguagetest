@@ -20,7 +20,10 @@ const QuizzesLayout = async ({ children }: { children: React.ReactNode }) => {
     }
     return (
         <Suspense>
-            <QuizProvider data={quizData} user={userData}>
+            <QuizProvider data={quizData} user={userData} session={{
+                session_id: session.session_id,
+                uuid: session.session_uuid,
+            }}>
                 <div className='container-quiz'>
                     <ProgressBar />
                     <div className="flex-grow">

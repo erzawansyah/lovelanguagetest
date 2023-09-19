@@ -24,22 +24,19 @@ export async function middleware(request: NextRequest) {
             const response = NextResponse.next();
 
             // create session
-            const session = await initSession({
+            return await initSession({
                 user_name: queryParams.get('name') || '',
                 user_email: queryParams.get('email') || '',
                 quiz_id: Number(queryParams.get('quiz_id') || '0'),
+            }).then((session) => {
+                response.cookies.set('session', JSON.stringify(session), {
+                    path: '/',
+                    httpOnly: true,
+                    maxAge: 60 * 60 * 24 * 7,
+                    sameSite: 'strict',
+                });
+                return response;
             })
-
-            // set session in cookies
-            response.cookies.set('session', JSON.stringify(session), {
-                path: '/',
-                httpOnly: true,
-                maxAge: 60 * 60 * 24 * 7,
-                sameSite: 'strict',
-            });
-
-            // return response
-            return response;
         }
 
         // if there is no query params, throw error

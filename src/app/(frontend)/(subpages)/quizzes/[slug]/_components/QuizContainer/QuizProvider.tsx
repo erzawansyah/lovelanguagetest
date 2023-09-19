@@ -2,6 +2,7 @@
 import { Suspense, createContext, useContext, useEffect, useReducer } from "react";
 import { quizReducer, quizInitialState, QuizActionTypeInterface } from "../../reducer";
 import { QuizActionInterface, QuizDataInterface, QuizStateInterface } from "../../_definition";
+import { useRouter } from "next/navigation";
 
 const QuizContext = createContext<{
     state: QuizStateInterface,
@@ -14,12 +15,18 @@ const QuizContext = createContext<{
 interface QuizProviderProps {
     data: QuizDataInterface;
     user: { name: string, email: string }
+    session: { session_id: number, uuid: string }
     children: React.ReactNode;
 }
 
 export const QuizProvider = (props: QuizProviderProps) => {
     const [state, dispatch] = useReducer(quizReducer, quizInitialState);
-    const { children, data, user } = props;
+    const router = useRouter();
+    const { children, data, user, session } = props;
+
+    useEffect(() => {
+        router.push(`?session_id=${session.session_id}&session_uuid=${session.uuid}`)
+    }, [router, session])
 
     useEffect(() => {
         if (data) {
