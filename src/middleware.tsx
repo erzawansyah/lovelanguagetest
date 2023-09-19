@@ -47,17 +47,12 @@ export async function middleware(request: NextRequest) {
 
     // If in result page, check if there is session
     if (request.nextUrl.pathname === '/quizzes/result') {
-        // mark as finished if there is session for 1 days
+        // remove session
         const cookies = request.cookies
         const hasSession = cookies.has('session');
         const response = NextResponse.next();
         if (hasSession) {
-            response.cookies.set('finished', 'true', {
-                path: '/',
-                httpOnly: true,
-                maxAge: 60 * 60 * 24 * 1,
-                sameSite: 'strict',
-            });
+            response.cookies.delete('session');
         }
         return NextResponse.next();
     }

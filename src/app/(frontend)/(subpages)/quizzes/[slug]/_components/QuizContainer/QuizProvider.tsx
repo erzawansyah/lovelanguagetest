@@ -25,7 +25,7 @@ export const QuizProvider = (props: QuizProviderProps) => {
     const { children, data, user, session } = props;
 
     useEffect(() => {
-        router.push(`?session_id=${session.session_id}&session_uuid=${session.uuid}`)
+        router.replace(`?session_id=${session.session_id}&session_uuid=${session.uuid}`)
     }, [router, session])
 
     useEffect(() => {
