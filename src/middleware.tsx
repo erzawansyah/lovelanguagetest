@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
                 uuid: uuidv4(),
                 start_date: Date.now().toString(),
             })
-            
+
             response.cookies.set('session', JSON.stringify(session), {
                 path: '/',
                 httpOnly: true,
@@ -83,7 +83,7 @@ const createSession = async (data: UserInitialData) => {
     }
 
     // create session
-    const wpRequest: Response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quiz_sessions`, {
+    const wpRequest: Response = await fetch(`https://lovelanguagequiz.co/wp-json/wp/v2/quiz_sessions`, {
         method: 'POST',
         body: JSON.stringify(preparedBody),
         headers: {
