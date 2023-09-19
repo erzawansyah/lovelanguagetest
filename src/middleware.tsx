@@ -7,7 +7,6 @@ export async function middleware(request: NextRequest) {
 
     // Active only on homepage
     if (request.nextUrl.pathname === '/') {
-
         // check session in request cookies
         const cookies = request.cookies
         const hasSession = cookies.has('session');
@@ -24,8 +23,7 @@ export async function middleware(request: NextRequest) {
         // if there is query params, create session
         if (hasQueryParams) {
             const response = NextResponse.next();
-
-            const session:UserSession = await fetch('http://localhost:3000/api/sessions/start', {
+            const session: UserSession = await fetch(`${origin}/api/sessions/start`, {
                 method: 'POST',
                 body: JSON.stringify({
                     user_name: queryParams.get('name') || '',
