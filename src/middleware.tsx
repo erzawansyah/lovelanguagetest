@@ -1,5 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { initSession } from './app/(helper)/handleSession';
+import { v4 as uuidv4 } from 'uuid';
+import { UserSession } from './types/api/createSessionsRequest';
+
 
 export async function middleware(request: NextRequest) {
 
@@ -23,20 +25,26 @@ export async function middleware(request: NextRequest) {
         if (hasQueryParams) {
             const response = NextResponse.next();
 
-            // create session
-            return await initSession({
-                user_name: queryParams.get('name') || '',
-                user_email: queryParams.get('email') || '',
-                quiz_id: Number(queryParams.get('quiz_id') || '0'),
-            }).then((session) => {
-                response.cookies.set('session', JSON.stringify(session), {
-                    path: '/',
-                    httpOnly: true,
-                    maxAge: 60 * 60 * 24 * 7,
-                    sameSite: 'strict',
-                });
-                return response;
-            })
+            const session:UserSession = await fetch('http://localhost:3000/api/sessions/start', {
+                method: 'POST',
+                body: JSON.stringify({
+                    user_name: queryParams.get('name') || '',
+                    user_email: queryParams.get('email') || '',
+                    quiz_id: Number(queryParams.get('quiz_id') || '0'),
+                    uuid: uuidv4(),
+                    start_date: Date.now().toString(),
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(res => res.json())
+            response.cookies.set('session', JSON.stringify(session), {
+                path: '/',
+                httpOnly: true,
+                maxAge: 60 * 60 * 24 * 7,
+                sameSite: 'strict',
+            });
+            return response;
         }
 
         // if there is no query params, throw error
