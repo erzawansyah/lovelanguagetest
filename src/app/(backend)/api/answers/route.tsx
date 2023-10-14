@@ -70,7 +70,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<CreateAns
         }
     }
 
-    const wpRequests: Promise<WpAnswersPostTypeResponse> = await wpApi('user_answers', {
+    const wp: WpAnswersPostTypeResponse = await wpApi('user_answers', {
         method: 'POST',
         headers: {
             'Authorization': `Basic ${btoa(`${username}:${token}`)}`,
@@ -79,34 +79,20 @@ export async function POST(request: NextRequest): Promise<NextResponse<CreateAns
         body: JSON.stringify(answers)
     })
 
-    const createdAnswers = await wpRequests.then((res) => {
-        return {
-            answer_id: res.id,
-            session_id: res.acf.session_id,
-            quiz_id: res.acf.quiz_id,
-            answers: res.acf.answer_value.split('\n').map((item) => {
-                const [question_number, question_id, answer_value, answer_label] = item.split('|')
-                return {
-                    question_number: Number(question_number),
-                    question_id: Number(question_id),
-                    answer_value: answer_value,
-                    answer_label: answer_label
-                }
-            })
-        }
-    })
-
-    // const createdAnswers = await wpRequests.then((res) => {
-    //     const result = res?.map((item) => {
-    //         return {
-    //             id: item.id,
-    //             question_id: item.acf.question_id,
-    //             answer_value: item.acf.answer_value,
-    //             answer_label: item.acf.answer_label
-    //         }
-    //     })
-    //     return result
-    // })
+    const createdAnswers = {
+        answer_id: wp.id,
+        session_id: wp.acf.session_id,
+        quiz_id: wp.acf.quiz_id,
+        answers: wp.acf.answer_value.split('\n').map((item) => {
+            const [question_number, question_id, answer_value, answer_label] = item.split('|')
+            return {
+                question_number: Number(question_number),
+                question_id: Number(question_id),
+                answer_value: answer_value,
+                answer_label: answer_label
+            }
+        })
+    }
 
     return NextResponse.json({
         session_id: sessionId,
