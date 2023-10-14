@@ -22,7 +22,7 @@ export const handleFinishQuiz = async (props: HandleFinishQuizProps) => {
         }).then(r => r.json())
     }
 
-    const handleSubmitAnswer = async () => {
+    const handleSubmitAnswer = async (): Promise<CreateAnswersResponseBody> => {
         return await fetch('/api/answers', {
             method: 'POST',
             body: JSON.stringify(answers),

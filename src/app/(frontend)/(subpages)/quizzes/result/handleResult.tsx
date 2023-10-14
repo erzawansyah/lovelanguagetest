@@ -63,4 +63,3 @@ export const handleResult = async (
 
     return groupped
 }
-

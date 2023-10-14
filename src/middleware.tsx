@@ -5,7 +5,6 @@ import { WpSessionPostTypeResponse } from './types/wpSessionsPostTypeResponse';
 
 
 export async function middleware(request: NextRequest) {
-
     // Active only on homepage
     if (request.nextUrl.pathname === '/') {
         // check session in request cookies
@@ -39,7 +38,7 @@ export async function middleware(request: NextRequest) {
                 sameSite: 'strict',
             });
             return response;
-        }
+        } 
 
         // if there is no query params, throw error
         return NextResponse.next()

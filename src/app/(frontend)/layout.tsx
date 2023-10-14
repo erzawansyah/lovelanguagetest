@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Love Language Test App',
-  description: 'Powered by Sediksi.com'
+  description: 'Powered by PT Literasi Kreatif Indonesia'
 }
 const RootLayout = ({
   children,

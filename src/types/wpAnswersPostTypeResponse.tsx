@@ -5,8 +5,6 @@ export type WpAnswersPostTypeResponse = WpCustomPostType<WpAnswerssCustomField>;
 
 interface WpAnswerssCustomField {
     session_id: number,
-    question_id: number,
-    question_number: number,
-    answer_value: number | string,
-    answer_label?: string
+    quiz_id: number,
+    answer_value: string,
 }
