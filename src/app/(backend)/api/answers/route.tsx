@@ -61,7 +61,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<CreateAns
     const initial_name = generateInitials(user_name);
 
     const answers: WpCreateAnswerRequestBody = {
-        title: `${initial_name}-${sessionId}|${quiz_id}}`,
+        title: `${initial_name}-${sessionId}|${quiz_id}`,
         status: 'publish',
         acf: {
             session_id: sessionId,

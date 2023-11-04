@@ -4,6 +4,9 @@ import { redirect } from 'next/navigation'
 import { WpQuizzesPostTypeResponse } from '@/types/wpQuizzesPostTypeResponse'
 import WaitingCookies from './WaitingForCookies'
 
+/**
+ * Props for the main page component.
+ */
 interface SearchParamsProps {
     searchParams: {
         quiz_id: string,
@@ -12,9 +15,13 @@ interface SearchParamsProps {
     }
 }
 
+/**
+ * The main page component.
+ * @param params The search parameters for the quiz.
+ * @returns The main page component.
+ */
 const MainPage: NextPage<SearchParamsProps> = async (params) => {
     const { quiz_id, name, email } = params.searchParams
-
 
     // get slug from quiz_id
     if (quiz_id && name && email) {
@@ -32,3 +39,4 @@ const MainPage: NextPage<SearchParamsProps> = async (params) => {
 }
 
 export default MainPage
+
