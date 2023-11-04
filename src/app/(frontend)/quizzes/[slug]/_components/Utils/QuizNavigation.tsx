@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { handleFinishQuiz as onFinish } from "./handleFinishQuiz";
 import { dataPreparation } from "./dataPreparation";
 import { answerPreparation } from "./answerPreparation";
-import { secretStorage } from "@/app/(helper)/handleStorage";
+import { secretStorage } from "@helpers/handleStorage";
 
 const QuizNavigation = () => {
     const [finishModal, setFinishModal] = useState(false);

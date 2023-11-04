@@ -1,6 +1,6 @@
 'use client'
 import { CreateAnswersResponseBody } from '@/app/(backend)/api/answers/route';
-import { secretStorage } from '@/app/(helper)/handleStorage';
+import { secretStorage } from '@helpers/handleStorage';
 import { useEffect, useState } from 'react';
 import { getSettings, handleResult } from './handleResult';
 import Image from 'next/image';

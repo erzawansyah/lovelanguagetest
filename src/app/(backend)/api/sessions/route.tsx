@@ -1,4 +1,4 @@
-import { SubmitUserDataInterface } from "@/app/(frontend)/(subpages)/quizzes/[slug]/_definition";
+import { SubmitUserDataInterface } from "@frontend/(subpages)/quizzes/[slug]/_definition";
 import { UserInitialData } from "@/types/api/createSessionsRequest";
 import { WpSessionPostTypeResponse } from "@/types/wpSessionsPostTypeResponse";
 import { NextRequest, NextResponse } from "next/server";

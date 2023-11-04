@@ -1,5 +1,5 @@
 import { CreateAnswersResponseBody } from "@/app/(backend)/api/answers/route"
-import { wpApi } from "@/app/(helper)/handleWpApi"
+import { wpApi } from "@helpers/handleWpApi"
 import { QuizSettingsState, ResultState } from "./page"
 import { WpLanguagesPostTypeResponse } from "@/types/wpLanguagesPostTypeResponse"
 import { WpDefaultPostTypeResponse } from "@/types/wpDefaultPostTypeResponse"

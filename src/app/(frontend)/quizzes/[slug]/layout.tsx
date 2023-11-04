@@ -1,13 +1,14 @@
 
+import { getSessionCookie } from "@helpers/handleSession";
+import { wpApi } from "@helpers/handleWpApi";
+import { UserSession } from "@definition/api/createSessionsRequest";
+import { WpQuizzesPostTypeResponse } from "@definition/wpQuizzesPostTypeResponse";
+
 import { QuizProvider } from "./_components/QuizContainer/QuizProvider"
 import { QuizDataInterface } from "./_definition"
-import { wpApi } from "@/app/(helper)/handleWpApi";
-import { WpQuizzesPostTypeResponse } from "@/types/wpQuizzesPostTypeResponse";
 import ProgressBar from "./_components/Utils/ProgressBar";
 import QuizNavigator from "./_components/Utils/QuizNavigation";
 import { Suspense } from "react";
-import { getSessionCookie } from "@/app/(helper)/handleSession";
-import { UserSession } from "@/types/api/createSessionsRequest";
 
 const QuizzesLayout = async ({ children }: { children: React.ReactNode }) => {
     const session: UserSession = getSessionCookie('session');

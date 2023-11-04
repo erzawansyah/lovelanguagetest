@@ -1,7 +1,7 @@
 import { QuestionItemInterface } from "../../_definition";
-import { wpApi } from "@/app/(helper)/handleWpApi";
+import { wpApi } from "@helpers/handleWpApi";
 import { WpQuestionsPostTypeResponse } from "@/types/wpQuestionsPostTypeResponse";
-import { secretStorage } from "@/app/(helper)/handleStorage";
+import { secretStorage } from "@helpers/handleStorage";
 
 // Async function to fetch question data from the API
 export const prepareQuestionData = async (current: number, questionId: number | undefined) => {

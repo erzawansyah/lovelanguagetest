@@ -1,4 +1,4 @@
-import { wpApi } from "@/app/(helper)/handleWpApi";
+import { wpApi } from "@helpers/handleWpApi";
 import { UserSession, WpUpdateSessionRequestBody } from "@/types/api/createSessionsRequest";
 import { WpSessionPostTypeResponse } from "@/types/wpSessionsPostTypeResponse";
 import { NextRequest, NextResponse } from "next/server";

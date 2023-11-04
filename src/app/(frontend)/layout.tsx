@@ -1,5 +1,5 @@
-import Header from '@/app/(frontend)/_components/Header'
-import './globals.css'
+import Header from '@frontend/(components)/Header'
+import '@frontend/globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react';
@@ -21,14 +21,14 @@ const RootLayout = ({
 
   return (
     <html lang="en">
-      <GoogleTagManagerScript />
-      <MsClarityCode />
       <body className={`${inter.className} flex flex-col h-screen`}>
         <Header />
         <main className='relative flex-grow overflow-auto'>
           {children}
           <div id="modal" />
         </main>
+        <GoogleTagManagerScript />
+        <MsClarityCode />
         <Analytics />
       </body>
     </html>

@@ -1,5 +1,5 @@
 'use client';
-import Modal from "@/app/(frontend)/_components/Modal";
+import Modal from "@frontend/(components)/Modal";
 import { useQuizContext } from "../QuizContainer/QuizProvider";
 import { useState } from "react";
 

@@ -1,12 +1,13 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { UserInitialData, UserSession, WpCreateSessionRequestBody } from './types/api/createSessionsRequest';
-import { WpSessionPostTypeResponse } from './types/wpSessionsPostTypeResponse';
+import { UserInitialData, UserSession, WpCreateSessionRequestBody } from '@definition/api/createSessionsRequest';
+import { WpSessionPostTypeResponse } from '@definition/wpSessionsPostTypeResponse';
 
 
 export async function middleware(request: NextRequest) {
     // Active only on homepage
     if (request.nextUrl.pathname === '/') {
+
         // check session in request cookies
         const cookies = request.cookies
         const hasSession = cookies.has('session');
@@ -29,7 +30,7 @@ export async function middleware(request: NextRequest) {
                 quiz_id: Number(queryParams.get('quiz_id') || '0'),
                 uuid: uuidv4(),
                 start_date: Date.now().toString(),
-            })
+            });
 
             response.cookies.set('session', JSON.stringify(session), {
                 path: '/',
@@ -38,10 +39,10 @@ export async function middleware(request: NextRequest) {
                 sameSite: 'strict',
             });
             return response;
-        } 
+        }
 
-        // if there is no query params, throw error
-        return NextResponse.next()
+        // if there is no query params, redirect to homepage
+        return NextResponse.next();
     }
 
     // If in result page, check if there is session
@@ -85,18 +86,31 @@ const createSession = async (data: UserInitialData) => {
             'Authorization': 'Basic ' + Buffer.from(`${username}:${token}`).toString('base64')
         }
     })
-    const result: WpSessionPostTypeResponse = await wpRequest.json()
 
-    // prepare session data
-    const session: UserSession = {
-        session_id: result.id,
-        session_uuid: result.slug,
-        quiz_id: result.acf.quiz_id,
-        start_date: result.acf.start_date,
-        user: {
-            user_name: result.acf.user_name,
-            user_email: result.acf.user_email,
+    try {
+
+        if (wpRequest.status >= 400) {
+            throw new Error(`Error fetch api: ${wpRequest.status}. Message: ${wpRequest.statusText}`);
         }
+
+        const result: WpSessionPostTypeResponse = await wpRequest.json()
+        // prepare session data
+        const session: UserSession = {
+            session_id: result.id,
+            session_uuid: result.slug,
+            quiz_id: result.acf.quiz_id,
+            start_date: result.acf.start_date,
+            user: {
+                user_name: result.acf.user_name,
+                user_email: result.acf.user_email,
+            }
+        }
+        return session
+
+
+    } catch (error) {
+        console.error(error)
+        throw new Error("Failed to create session")
     }
-    return session
+
 }

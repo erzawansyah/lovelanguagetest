@@ -1,5 +1,5 @@
 import { cookies as nextCookies } from "next/headers";
-import { UserInitialData, UserSession } from "../../types/api/createSessionsRequest"
+import { UserInitialData, UserSession } from "@definition/api/createSessionsRequest"
 import { v4 as uuidv4 } from 'uuid';
 
 export const initSession: (data: Omit<Omit<UserInitialData, 'uuid'>, 'start_date'>) => Promise<UserSession> = async (data) => {

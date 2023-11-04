@@ -1,6 +1,6 @@
-import { SubmitUserAnswerInterface } from "@/app/(frontend)/(subpages)/quizzes/[slug]/_definition";
-import { generateInitials } from "@/app/(helper)/handleName";
-import { wpApi } from "@/app/(helper)/handleWpApi";
+import { SubmitUserAnswerInterface } from "@frontend/(subpages)/quizzes/[slug]/_definition";
+import { generateInitials } from "@helpers/handleName";
+import { wpApi } from "@helpers/handleWpApi";
 import { UserSession } from "@/types/api/createSessionsRequest";
 import { WpAnswersPostTypeResponse } from "@/types/wpAnswersPostTypeResponse";
 import { NextRequest, NextResponse } from "next/server";
