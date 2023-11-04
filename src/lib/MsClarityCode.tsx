@@ -1,3 +1,4 @@
+'use client'
 import Script from "next/script"
 
 export const MsClarityCode = () => {
@@ -11,7 +12,6 @@ export const MsClarityCode = () => {
         t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
         y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
       })(window, document, "clarity", "script", "jl38fg70wk")`}}
-
         />
     </>
 }
