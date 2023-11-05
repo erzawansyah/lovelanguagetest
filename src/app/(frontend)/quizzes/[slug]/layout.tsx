@@ -1,4 +1,3 @@
-
 import { getSessionCookie } from "@helpers/handleSession";
 import { wpApi } from "@helpers/handleWpApi";
 import { UserSession } from "@definition/api/createSessionsRequest";

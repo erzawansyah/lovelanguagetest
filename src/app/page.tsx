@@ -2,7 +2,7 @@ import { wpApi } from '@helpers/handleWpApi'
 import { NextPage } from 'next'
 import { redirect } from 'next/navigation'
 import { WpQuizzesPostTypeResponse } from '@/types/wpQuizzesPostTypeResponse'
-import WaitingCookies from '@frontend/(components)/WaitingForCookies'
+import WaitingCookies from '@/components/WaitingForCookies'
 
 /**
  * Props for the main page component.

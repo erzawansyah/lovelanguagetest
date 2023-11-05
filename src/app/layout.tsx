@@ -1,5 +1,5 @@
-import Header from '@frontend/(components)/Header'
-import '@frontend/globals.css'
+import Header from '@/components/Header'
+import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react';

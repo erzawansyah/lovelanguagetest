@@ -1,21 +1,16 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
-import { UserInitialData, UserSession, WpCreateSessionRequestBody } from '@definition/api/createSessionsRequest';
-import { WpSessionPostTypeResponse } from '@definition/wpSessionsPostTypeResponse';
-
 
 export async function middleware(request: NextRequest) {
     // Active only on homepage
     if (request.nextUrl.pathname === '/') {
+        const next = NextResponse.next();
 
         // check session in request cookies
         const cookies = request.cookies
         const hasSession = cookies.has('session');
 
         // if there is session, return next
-        if (hasSession) {
-            return NextResponse.next();
-        }
+        if (hasSession) return next
 
         // if there is no session, check if there is query params
         const queryParams = request.nextUrl.searchParams;
@@ -23,26 +18,51 @@ export async function middleware(request: NextRequest) {
 
         // if there is query params, create session
         if (hasQueryParams) {
-            const response = NextResponse.next();
-            const session: UserSession = await createSession({
-                user_name: queryParams.get('name') || '',
-                user_email: queryParams.get('email') || '',
-                quiz_id: Number(queryParams.get('quiz_id') || '0'),
-                uuid: uuidv4(),
-                start_date: Date.now().toString(),
-            });
+            const hostname = request.nextUrl.hostname
+            const protocol = request.nextUrl.protocol;
+            const port = request.nextUrl.port || '80';
+            const endpoint = '/api/middleware/sessions/create'
+            const url = `${protocol}//${hostname}:${port}${endpoint}`
 
-            response.cookies.set('session', JSON.stringify(session), {
-                path: '/',
-                httpOnly: true,
-                maxAge: 60 * 60 * 24 * 7,
-                sameSite: 'strict',
-            });
-            return response;
+            const session = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: queryParams.get('name') || '',
+                    email: queryParams.get('email') || '',
+                    quizId: queryParams.get('quiz_id')
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(res => {
+                if (res.status >= 400) {
+                    throw new Error(`Error fetch api: ${res.status}. Message: ${res.statusText}`);
+                }
+                return res.json()
+            }).catch(err => {
+                throw new Error(err)
+            })
+
+            try {
+                if (!session) {
+                    throw new Error("Failed to create session")
+                }
+                next.cookies.set('session', JSON.stringify(session), {
+                    path: '/',
+                    httpOnly: true,
+                    maxAge: 60 * 60 * 24 * 7,
+                    sameSite: 'strict',
+                });
+
+                return next
+            } catch (error) {
+                console.error(error)
+                throw new Error("Failed to create session")
+            }
         }
 
-        // if there is no query params, redirect to homepage
-        return NextResponse.next();
+        // if there is no query params, redirect to login 
+        return next
     }
 
     // If in result page, check if there is session
@@ -57,60 +77,5 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-
-    // if there is no session, throw error
     return NextResponse.next();
-}
-
-const createSession = async (data: UserInitialData) => {
-    const username: string = process.env.WP_USERNAME || "";
-    const token: string = process.env.WP_TOKEN || "";
-
-    const preparedBody: WpCreateSessionRequestBody = {
-        title: data.uuid,
-        status: 'publish',
-        acf: {
-            user_name: data.user_name,
-            user_email: data.user_email,
-            quiz_id: data.quiz_id,
-            start_date: data.start_date,
-        }
-    }
-
-    // create session
-    const wpRequest: Response = await fetch(`https://lovelanguagetest.co/wp-json/wp/v2/quiz_sessions`, {
-        method: 'POST',
-        body: JSON.stringify(preparedBody),
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + Buffer.from(`${username}:${token}`).toString('base64')
-        }
-    })
-
-    try {
-
-        if (wpRequest.status >= 400) {
-            throw new Error(`Error fetch api: ${wpRequest.status}. Message: ${wpRequest.statusText}`);
-        }
-
-        const result: WpSessionPostTypeResponse = await wpRequest.json()
-        // prepare session data
-        const session: UserSession = {
-            session_id: result.id,
-            session_uuid: result.slug,
-            quiz_id: result.acf.quiz_id,
-            start_date: result.acf.start_date,
-            user: {
-                user_name: result.acf.user_name,
-                user_email: result.acf.user_email,
-            }
-        }
-        return session
-
-
-    } catch (error) {
-        console.error(error)
-        throw new Error("Failed to create session")
-    }
-
 }

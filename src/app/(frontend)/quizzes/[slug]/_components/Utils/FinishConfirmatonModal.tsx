@@ -1,4 +1,4 @@
-import Modal from "@frontend/(components)/Modal"
+import Modal from "@/components/Modal"
 import { QuizStateInterface } from "../../_definition";
 import { useRouter } from "next/navigation";
 import Image from "next/image";

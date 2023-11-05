@@ -11,7 +11,6 @@ const QuizzesPage: NextPage = () => {
   return (
     <>
       {current === 0 ? <QuizInstruction /> : <QuestionBank />}
-
     </>
   );
 }
