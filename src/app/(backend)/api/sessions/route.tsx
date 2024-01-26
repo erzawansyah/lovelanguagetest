@@ -1,4 +1,3 @@
-import { SubmitUserDataInterface } from "@frontend/(subpages)/quizzes/[slug]/_definition";
 import { UserInitialData } from "@/types/api/createSessionsRequest";
 import { WpSessionPostTypeResponse } from "@/types/wpSessionsPostTypeResponse";
 import { NextRequest, NextResponse } from "next/server";
@@ -40,8 +39,8 @@ interface CreateSessionsResponseBody {
 
 export async function POST(request: NextRequest): Promise<NextResponse<CreateSessionsResponseBody>> {
     const data: Promise<UserInitialData> = await request.json()
-    const username:string = process.env.WP_USERNAME || "";
-    const token:string = process.env.WP_TOKEN || "";
+    const username: string = process.env.WP_USERNAME || "";
+    const token: string = process.env.WP_TOKEN || "";
 
     const prepareData: CreateSessionsRequestBody = {
         title: (await data).uuid,
