@@ -25,7 +25,7 @@
       "@helpers/*": ["./src/helpers/*"],
       "@components/*": ["./src/components/*"],
       "@backend/*": ["./src/app/(backend)/*"],
-      "@frontend/*": ["./src/app/(frontend)/*"],
+      "@frontend/*": ["./src/app/(frontend)/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

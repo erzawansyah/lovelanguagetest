@@ -7,7 +7,7 @@ const Header = () => {
         <header className='w-full flex flex-row py-0 justify-center shadow-md z-50'>
             <div className='container flex justify-center md:justify-between'>
                 <div className='p-4'>
-                    <Image src='/logo-light.png' alt='logo love language test' width={320} height={40} />
+                    <Image src='/logo-light.png' alt='logo love language test' width={320} height={40} priority={true} />
                 </div>
                 <nav className='p-3 flex justify-center items-center'>
                     {/* add button to exit test */}

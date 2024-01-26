@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
             const hostname = request.nextUrl.hostname
             const protocol = request.nextUrl.protocol;
             const port = request.nextUrl.port || '80';
-            const endpoint = '/api/middleware/sessions/create'
+            const endpoint = '/api/sessions/create'
             const url = `${protocol}//${hostname}:${port}${endpoint}`
 
             const session = await fetch(url, {

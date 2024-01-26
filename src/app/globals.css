@@ -6,6 +6,10 @@
   html {
     @apply font-body;
   }
+
+  main {
+    @apply h-full overflow-auto;
+  }
 }
 
 .btn-primary {

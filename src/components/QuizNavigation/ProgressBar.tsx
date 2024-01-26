@@ -1,18 +1,13 @@
 'use client'
-import React from 'react'
+import { useQuizStore } from '@/helpers/store/quiz'
+import React, { useMemo } from 'react'
 
-type Props = {
-    current: number,
-    total: number,
-}
+const ProgressBar = () => {
+    const { paginate } = useQuizStore()
+    const { current, total } = paginate
 
-const ProgressBar = (props: Props) => {
-    const { current, total } = props
-    const [progress, setProgress] = React.useState(0)
-
-    React.useEffect(() => {
-        const progress = ((current + 1) / total) * 100
-        setProgress(progress)
+    const progress = useMemo(() => {
+        return parseFloat(((current / total) * 100).toFixed(2))
     }, [current, total])
 
     return (

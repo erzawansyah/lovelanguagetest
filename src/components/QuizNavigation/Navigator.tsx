@@ -1,41 +1,39 @@
 'use client'
-import React from 'react'
+import React, { useMemo } from 'react'
 import StartButton from './Buttons/Start'
 import NextButton from './Buttons/Next'
 import PrevButton from './Buttons/Previous'
 import SubmitButton from './Buttons/Submit'
 
-type Props = {
-    current: number,
-    total: number,
-    next: number,
-    prev: number,
-    control: {
-        next: (next: number) => void,
-        prev: (prev: number) => void,
-        submit: () => void,
-        start: () => void,
-    }
-}
+import { useParams, useRouter } from 'next/navigation'
+import { useQuizStore } from '@/helpers/store/quiz'
 
-const Navigator = (props: Props) => {
-    const { current, total, next, prev } = props;
 
-    const handleStartButton = () => {
-        props.control.start();
-    }
+const Navigator = () => {
+    const quizStore = useQuizStore()
+    const { current, next, prev, total } = quizStore.paginate
+    const { setCurrent } = quizStore
+    const router = useRouter()
+    const params = useParams()
+    const path = params.path
+    const slug = path[0]
 
     const handleNextButton = () => {
-        props.control.next(next);
+        setCurrent(next)
     }
 
     const handlePrevButton = () => {
-        props.control.prev(prev);
+        setCurrent(prev)
+    }
+
+    const handleStartButton = () => {
+        setCurrent(1)
     }
 
     const handleSubmitButton = () => {
-        props.control.submit();
+        router.replace(`/quiz/${slug}/result`)
     }
+
 
 
     if (current === 0) {

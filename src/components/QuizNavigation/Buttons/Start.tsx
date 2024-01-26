@@ -7,16 +7,12 @@ type Props = {
 
 
 const StartButton = (props: Props) => {
-    const router = useRouter()
-    const params = useSearchParams()
-    const total = params.get('total')
-
     return (
         <button
             onClick={props.handleClick}
             type='button'
             aria-label='Start Quiz question'
-            className='btn-primary w-full'
+            className='btn-primary w-full max-w-lg mx-auto'
         >
             Start Quiz
         </button>

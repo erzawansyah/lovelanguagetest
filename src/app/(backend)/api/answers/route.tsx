@@ -1,4 +1,4 @@
-import { SubmitUserAnswerInterface } from "@frontend/(subpages)/quizzes/[slug]/_definition";
+import { SubmitUserAnswerInterface } from "@frontend/quizzes/[slug]/_definition";
 import { generateInitials } from "@helpers/handleName";
 import { wpApi } from "@helpers/handleWpApi";
 import { UserSession } from "@/types/api/createSessionsRequest";
@@ -25,7 +25,6 @@ interface WpCreateAnswerRequestBody {
         answer_value: number | string
     }
 }
-
 
 export interface CreateAnswersResponseBody {
     session_id: number,

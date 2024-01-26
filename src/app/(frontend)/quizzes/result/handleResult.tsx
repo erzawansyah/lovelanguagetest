@@ -22,6 +22,8 @@ type ResultItem = {
     subtitle: string,
     excerpt: string,
     image: number,
+    results: string,
+    colours: string,
 }
 
 export const handleResult = async (
@@ -37,6 +39,9 @@ export const handleResult = async (
         subtitle: item.acf.subtitle,
         excerpt: item.acf.excerpt,
         image: item.featured_media,
+        results: item.acf.results,
+        colours: item.acf.colours,
+
     }))
 
     const featuredMedia: FeaturedImageItem[] = await wpApi(`media?include=${results.map((item) => item.image).join(',')}`)
@@ -58,6 +63,8 @@ export const handleResult = async (
             title: details.title,
             subtitle: details.subtitle,
             excerpt: details.excerpt,
+            results: details.results,
+            colours: details.colours,
         }
     }).sort((a, b) => b.count - a.count)
 

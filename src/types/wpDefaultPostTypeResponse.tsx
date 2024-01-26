@@ -10,6 +10,7 @@ export interface WpRequiredPostTypeResponse {
     type: string;
     link: string;
     title: { rendered: string };
+    featured_media?: number;
     template?: string;
     _links: {
         self: { href: string }[];
@@ -30,7 +31,6 @@ export interface WpDefaultPostTypeResponse extends WpRequiredPostTypeResponse {
     ping_status: string;
     format: string;
     sticky: boolean;
-    featured_media?: number;
     meta: any
 }
 
