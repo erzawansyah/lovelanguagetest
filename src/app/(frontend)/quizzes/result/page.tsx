@@ -154,9 +154,30 @@ const ResultPage = () => {
 
                 {/* Tombol Aksi */}
                 <div className="mt-2 col-span-2 flex flex-col gap-4 items-center">
-                    <button className="btn-primary w-full lg:w-1/2 rounded-full">Bagikan</button>
-                    <button className="btn-primary bg-secondary w-full lg:w-1/2 rounded-full">Kirim hasil ke email</button>
-                    <button className="btn-primary bg-accent w-full lg:w-1/2 rounded-full">Kembali ke Beranda</button>
+                    <button className="btn-primary w-full lg:w-1/2 rounded-full"
+                        onClick={() => {
+                            // Create the shareable link to share the result
+                            const url = new URL(window.location.href)
+                            const params = new URLSearchParams(url.search)
+                            params.set('result', JSON.stringify(result))
+                            url.search = params.toString()
+                            const shareableLink = url.toString()
+
+                            // Share the result
+                            navigator.share({
+                                title: 'Hasil Tes Bahasa Cinta',
+                                text: 'Hasil tes bahasa cinta',
+                                url: shareableLink,
+                            })
+                        }}
+                    >Bagikan</button>
+                    {/* <button className="btn-primary bg-secondary w-full lg:w-1/2 rounded-full">Kirim hasil ke email</button> */}
+                    <button className="btn-primary bg-accent w-full lg:w-1/2 rounded-full" onClick={() => {
+                        // secretStorage.removeItem('answers')
+                        secretStorage.clear()
+
+                        window.location.href = 'https://lovelanguagetest.co'
+                    }}>Kembali ke Beranda</button>
                 </div>
             </section>
         </div>
